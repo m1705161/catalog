@@ -1,0 +1,32 @@
+# Учебный PostgreSQL для демо OpenMetadata: слои stg / ods / dm.
+#
+# Поднимается ПОВЕРХ официального docker-compose.yml — оба файла сливаются
+# в один Compose-проект и разделяют сеть app_net, поэтому контейнер ingestion
+# видит Postgres по имени сервиса `postgres`.
+#
+# Запуск (из той же папки, где запускался docker-compose.yml):
+#   docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d
+#
+# Креды учебные, синтетические: user=demo / password=demo / db=retail.
+
+services:
+  postgres:
+    container_name: openmetadata_postgres
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: retail
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d retail"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app_net
