@@ -16,10 +16,12 @@
 | Файл | Назначение |
 |---|---|
 | [`README.md`](README.md) | этот файл |
-| [`guide-catalog.md`](guide-catalog.md) | пошаговый гайд от запуска до lineage и проверок |
+| [`guide-catalog.md`](guide-catalog.md) | Шаг 1 — пошаговый гайд от запуска до lineage и проверок |
+| [`step2-ai.md`](step2-ai.md) | Шаг 2 — Ollama + OpenCode + MCP OpenMetadata + скиллы |
 | [`docker-compose.yml`](docker-compose.yml) | официальный Compose-файл OpenMetadata 2.0.8 |
 | [`docker-compose.postgres.yml`](docker-compose.postgres.yml) | доп. Compose-файл с учебным PostgreSQL |
 | [`postgres-init/`](postgres-init/) | SQL-скрипты: схемы, таблицы, генерация данных |
+| [`skills/`](skills/) | скиллы-подсказки для локальной модели (Шаг 2) |
 
 ## Быстрый старт
 

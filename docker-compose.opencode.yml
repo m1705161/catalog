@@ -1,0 +1,34 @@
+# OpenCode v2 — агент внутри Docker (Web UI в браузере).
+#
+# Поднимается в общей сети app_net вместе с OpenMetadata, Postgres и Ollama.
+# Конфиг (provider Ollama + MCP OpenMetadata + скиллы) монтируется в /opencode.json —
+# именно этот путь v2 читает как проектный конфиг внутри контейнера.
+#
+# Студент работает через браузер: http://localhost:4096 (логин/пароль — из env).
+
+services:
+  opencode:
+    image: ghcr.io/anomalyco/opencode:2.0.0
+    container_name: openmetadata_opencode
+    restart: unless-stopped
+    command: ["serve", "--hostname", "0.0.0.0", "--port", "4096"]
+    ports:
+      - "4096:4096"
+    environment:
+      # Basic-auth для web UI (учебный стенд — не корпоративные секреты).
+      OPENCODE_SERVER_USERNAME: admin
+      OPENCODE_SERVER_PASSWORD: ${OPENCODE_UI_PASSWORD:-changeme}
+      # Токен бота OpenMetadata для MCP-сервера (обязателен).
+      OM_BOT_TOKEN: ${OM_BOT_TOKEN}
+    volumes:
+      - ./opencode.json:/opencode.json
+      - ./skills:/skills
+      - opencode-data:/root/.local/share/opencode
+    depends_on:
+      - openmetadata-server
+      - ollama
+    networks:
+      - app_net
+
+volumes:
+  opencode-data:

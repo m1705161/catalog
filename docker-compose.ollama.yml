@@ -1,0 +1,27 @@
+# Ollama — локальная LLM внутри Docker (модель 'gemma4:e4b').
+#
+# Override-файл: поднимается ПОВЕРХ официального docker-compose.yml,
+# сервис подключается к уже объявленной там сети `app_net`, поэтому
+# OpenMetadata/OpenCode/Postgres видят Ollama по имени сервиса `ollama`.
+#
+# Модели живут в named volume `ollama` — переживают `docker compose down`
+# и удаляются только `docker compose down -v`.
+#
+# Запуск (вместе с остальными файлами стека):
+#   docker compose -f docker-compose.yml -f docker-compose.postgres.yml \
+#                  -f docker-compose.ollama.yml -f docker-compose.opencode.yml up -d
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: openmetadata_ollama
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:11434:11434"   # loopback: API Ollama не требует авторизации
+    volumes:
+      - ollama:/root/.ollama
+    networks:
+      - app_net
+
+volumes:
+  ollama:

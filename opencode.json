@@ -1,0 +1,36 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "ollama/gemma4:e4b",
+  "providers": {
+    "ollama": {
+      "name": "Ollama",
+      "package": "@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "http://ollama:11434/v1"
+      },
+      "models": {
+        "gemma4:e4b": {
+          "name": "gemma4:e4b"
+        }
+      }
+    }
+  },
+  "mcp": {
+    "servers": {
+      "openmetadata": {
+        "type": "remote",
+        "url": "http://openmetadata-server:8585/mcp",
+        "protocol": "auto",
+        "headers": {
+          "Authorization": "Bearer {env:OM_BOT_TOKEN}"
+        },
+        "oauth": false
+      }
+    }
+  },
+  "skills": {
+    "paths": [
+      "/skills"
+    ]
+  }
+}
